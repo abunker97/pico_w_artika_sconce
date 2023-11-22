@@ -24,6 +24,8 @@ typedef struct Command
 
 extern char cmdBuff[ COMMAND_MESSAGE_LENGTH ];
 
+uint32_t TerminalTaskSetup();
+
 void TerminalTask( void* );
 
 #endif

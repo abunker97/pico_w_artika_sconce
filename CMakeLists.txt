@@ -24,6 +24,7 @@ target_link_libraries(${PROJECT_NAME}
     pico_stdlib
     hardware_uart
     pico_lwip_iperf
+    pico_lwip_mqtt
     FreeRTOS-Kernel
     FreeRTOS-Kernel-Heap4
 )

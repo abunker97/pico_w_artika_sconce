@@ -22,7 +22,6 @@ const Command availCommands[] = {
       .callback = (void*)displayHelp,
       .description = "This help menu." } };
 
-
 // delay command callback
 void delayCommand( char* cmd )
 {
@@ -34,9 +33,21 @@ void delayCommand( char* cmd )
       return;
    }
 
+   if( delay_queue == NULL )
+   {
+      printf( "ERROR: 'delay_queue' is not initialized.\r\n" );
+      return;
+   }
+
    if( xQueueSend( delay_queue, (void*)&val, 10 ) != pdTRUE )
    {
       printf( "ERROR: Could not put item in delay queue.\r\n" );
+      return;
+   }
+
+   if( HeartbeatSemaphore == NULL )
+   {
+      printf( "ERROR: 'HeartbeatSemaphore' is not initialize.\r\n" );
       return;
    }
 
@@ -52,6 +63,16 @@ void displayHelp()
       printf( "%s\r\n\t%s\r\n", availCommands[ i ].command,
               availCommands[ i ].description );
    }
+}
+
+// setups and creates the terminal task
+uint32_t TerminalTaskSetup()
+{
+   // creates queue for passing values around
+   delay_queue = xQueueCreate( DELAY_QUEUE_LEN, sizeof( uint32_t ) );
+
+   return xTaskCreate( TerminalTask, "Terminal Task", configMINIMAL_STACK_SIZE,
+                       NULL, 1, &TerminalTaskHandle );
 }
 
 // task that handles reading user input from the terminal

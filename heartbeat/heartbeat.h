@@ -14,6 +14,8 @@ extern QueueHandle_t delay_queue;
 
 extern TaskHandle_t HeartbeatTaskHandle;
 
+uint32_t HeartbeatTaskSetup();
+
 void HeartbeatTask( void* );
 
 #endif

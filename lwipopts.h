@@ -7,6 +7,7 @@
 #define LWIP_SOCKET                 1
 #define PING_USE_SOCKETS            1
 
+
 #define TCPIP_THREAD_STACKSIZE 1024
 #define DEFAULT_THREAD_STACKSIZE 1024
 #define DEFAULT_RAW_RECVMBOX_SIZE 8
@@ -18,6 +19,8 @@
 
 // ping_thread sets socket receive timeout, so enable this feature
 #define LWIP_SO_RCVTIMEO 1
+
+#define MEMP_NUM_SYS_TIMEOUT        (LWIP_NUM_SYS_TIMEOUT_INTERNAL + 1)
 
 #define MEM_LIBC_MALLOC             0
 #define MEM_ALIGNMENT               4
