@@ -16,8 +16,9 @@ uint32_t HeartbeatTaskSetup()
    HeartbeatSemaphore = xSemaphoreCreateBinary();
    HeartbeatSetupSemaphore = xSemaphoreCreateBinary();
 
-   return xTaskCreate( HeartbeatTask, "Heartbeat Task", configMINIMAL_STACK_SIZE,
-                       NULL, tskIDLE_PRIORITY, &HeartbeatTaskHandle );
+   return xTaskCreate( HeartbeatTask, "Heartbeat Task",
+                       configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY,
+                       &HeartbeatTaskHandle );
 }
 
 // task for blinking the led

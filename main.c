@@ -44,7 +44,7 @@ static void mqtt_incoming_data_cb( void* arg, const uint8_t* data, uint16_t len,
    }
    else
    {
-      strcpy(mqttData, "TOO LARGE");
+      strcpy( mqttData, "TOO LARGE" );
    }
 
    printf( "MQTT client \"%s\" data cb: data '%s' len %d, flags %d\r\n",
@@ -110,7 +110,7 @@ void MqttTask( void* param )
    if( cyw43_arch_wifi_connect_timeout_ms( "ATB", "Aust1nBunk3r6545",
                                            CYW43_AUTH_WPA2_AES_PSK, 3000 ) )
    {
-      printf( "ERROR: Failed to connect to wifi." );
+      printf( "ERROR: Failed to connect to wifi.\r\n" );
       vTaskDelete( NULL );
    }
 
