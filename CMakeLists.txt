@@ -34,11 +34,14 @@ target_sources(${PROJECT_NAME} PRIVATE
    ${PICO_LWIP_CONTRIB_PATH}/apps/ping/ping.c
    ${PROJECT_SOURCE_DIR}/heartbeat/heartbeat.c
    ${PROJECT_SOURCE_DIR}/terminal/terminal.c
+   ${PROJECT_SOURCE_DIR}/networking/asMqtt.c
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}
     ${PROJECT_SOURCE_DIR}/heartbeat
     ${PROJECT_SOURCE_DIR}/terminal
+    ${PROJECT_SOURCE_DIR}/networking
+    ${PROJECT_SOURCE_DIR}/ws2812
     ${PICO_LWIP_CONTRIB_PATH}/apps/ping
 )
