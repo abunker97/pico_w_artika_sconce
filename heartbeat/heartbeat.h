@@ -7,6 +7,8 @@
 #include "queue.h"
 #include "semphr.h"
 
+#define HEARTBEAT_INITIAL_DELAY_TIME 100
+
 extern SemaphoreHandle_t HeartbeatSemaphore;
 extern SemaphoreHandle_t HeartbeatSetupSemaphore;
 

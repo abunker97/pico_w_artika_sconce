@@ -24,7 +24,7 @@ uint32_t HeartbeatTaskSetup()
 // task for blinking the led
 void HeartbeatTask( void* param )
 {
-   uint32_t delayTime = 1000;
+   uint32_t delayTime = HEARTBEAT_INITIAL_DELAY_TIME;
 
    xSemaphoreTake( HeartbeatSetupSemaphore, portMAX_DELAY );
 
