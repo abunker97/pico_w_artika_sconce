@@ -1,0 +1,6 @@
+Example command:
+    serial-flash tcp:192.168.1.201:4242 build/pico_w_artika_sconce.elf
+
+Notes:
+    - picowota_pico_w_artika_sconce.elf is contains the bootloader and normal code
+    - pico_w_artika_sconce.elf contains only the normal code

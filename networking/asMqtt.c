@@ -6,6 +6,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "picowota/reboot.h"
+
 #include "pico/cyw43_arch.h"
 #include "lwip/ip4_addr.h"
 #include "lwip/dns.h"
@@ -29,12 +31,14 @@ typedef enum
    COMMAND_TOPIC,
    EFFECT_COMMAND_TOPIC,
    BRIGHTNESS_COMMAND_TOPIC,
+   PICOWOTA_REBOOT_TOPIC,
 } asMqtt_subTopics_enum;
 
 static const char* subTopics[ NUMBER_OF_SUB_TOPICS ] = {
     [COMMAND_TOPIC] = COMMAND_TOPIC_STRING,
     [EFFECT_COMMAND_TOPIC] = EFFECT_COMMAND_TOPIC_STRING,
     [BRIGHTNESS_COMMAND_TOPIC] = BRIGHTNESS_COMMAND_TOPIC_STRING,
+    [PICOWOTA_REBOOT_TOPIC] = PICOWOTA_REBOOT_TOPIC_STRING,
 };
 
 typedef enum
@@ -155,6 +159,14 @@ static void mqtt_incoming_data_cb( void* arg, const uint8_t* data, uint16_t len,
                     true, mqtt_request_cb,
                     LWIP_CONST_CAST( void*, &mqtt_client_info ) );
       break;
+   case PICOWOTA_REBOOT_TOPIC:
+      printf( "Rebooting into bootloader...\r\n" );
+      vTaskDelay( 100 / portTICK_PERIOD_MS );
+      if( strcmp( mqttData, "reboot" ) == 0 )
+      {
+         picowota_reboot( true );
+      }
+      break;
    default:
       break;
    }
@@ -239,7 +251,7 @@ static void mqtt_init_pub_chan_cb( void* arg, err_t err )
          printf( "Pub chain complete...\r\n" );
          break;
       default:
-         printf( "WARNING: Unknown state topic\r\n");
+         printf( "WARNING: Unknown state topic\r\n" );
       }
    }
 }
@@ -289,35 +301,9 @@ void mqtt_client_connect_broker()
       vTaskDelay( 100 / portTICK_PERIOD_MS );
    }
 
-   printf( "CurrntState: %u %u %u\r\n", currentLightState.lightState,
-           currentLightState.effect, currentLightState.brightness );
-
    mqtt_publish( mqtt_client, pubTopics[ AVAILABILITY_TOPIC ], "online", 6,
                  MQTT_QOS, true, mqtt_init_pub_chan_cb,
                  LWIP_CONST_CAST( void*, AVAILABILITY_TOPIC ) );
-
-   /*
-   mqtt_publish(
-       mqtt_client, pubTopics[ STATE_TOPIC ],
-       WS281X_Light_State_Strings[ currentLightState.lightState ],
-       strlen( WS281X_Light_State_Strings[ currentLightState.lightState ] ),
-       MQTT_QOS, true, mqtt_request_cb,
-       LWIP_CONST_CAST( void*, &mqtt_client_info ) );
-
-   mqtt_publish(
-       mqtt_client, pubTopics[ EFFECT_STATE_TOPIC ],
-       WS281X_Light_Effects[ currentLightState.effect ].string,
-       strlen( WS281X_Light_Effects[ currentLightState.effect ].string ),
-       MQTT_QOS, true, mqtt_request_cb,
-       LWIP_CONST_CAST( void*, &mqtt_client_info ) );
-
-   itoa( currentLightState.brightness, num_to_string_buf,
-         sizeof( num_to_string_buf ) / sizeof( char ) );
-
-   mqtt_publish( mqtt_client, pubTopics[ BRIGHTNESS_STATE_TOPIC ],
-                 num_to_string_buf, strlen( num_to_string_buf ), MQTT_QOS, true,
-                 mqtt_request_cb, LWIP_CONST_CAST( void*, &mqtt_client_info ) );
-                 */
 }
 
 void MqttTask( void* param )

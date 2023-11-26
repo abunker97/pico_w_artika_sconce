@@ -15,9 +15,9 @@
 
 #define WIFI_SECURITY CYW43_AUTH_WPA2_AES_PSK
 
-#define WIFI_CONNECTION_TIMEOUT_MS 3000
+#define WIFI_CONNECTION_TIMEOUT_MS 30000
 
-#define WIFI_CONNECTION_RETRY_TIME_MS 0
+#define WIFI_CONNECTION_RETRY_TIME_MS 5000
 
 #define MQTT_SERVER_ADDR "192.168.1.75"
 
@@ -40,10 +40,11 @@
 // these also need to be put into the .c file
 //
 
-#define NUMBER_OF_SUB_TOPICS 3
+#define NUMBER_OF_SUB_TOPICS 4
 #define COMMAND_TOPIC_STRING "electronics_room_sconce/command_topic"
 #define EFFECT_COMMAND_TOPIC_STRING "electronics_room_sconce/effect_command_topic"
 #define BRIGHTNESS_COMMAND_TOPIC_STRING "electronics_room_sconce/brightness_command_topic"
+#define PICOWOTA_REBOOT_TOPIC_STRING "electronics_room_sconce/picowota_reboot_topic"
 
 //
 // PUB TOPICS

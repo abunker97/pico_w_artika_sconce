@@ -6,6 +6,10 @@ include($ENV{PICO_SDK_PATH}/external/pico_sdk_import.cmake)
 include($ENV{PICO_SDK_PATH}/tools/CMakeLists.txt)
 include(FreeRTOS_Kernel_import.cmake)
 
+set(PICOWOTA_WIFI_SSID "ATB")
+set(PICOWOTA_WIFI_PASS "Aust1nBunk3r6545")
+set(PICOWOTA_WIFI_AP 0)
+
 project(pico_w_artika_sconce C CXX ASM)
 set(CMAKE_C_STANDARD 11)
 
@@ -34,6 +38,7 @@ target_link_libraries(${PROJECT_NAME}
     pico_lwip_mqtt
     FreeRTOS-Kernel
     FreeRTOS-Kernel-Heap4
+    picowota_reboot
 )
 
 target_sources(${PROJECT_NAME} PRIVATE
@@ -53,3 +58,7 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/ws281X
     ${PICO_LWIP_CONTRIB_PATH}/apps/ping
 )
+
+add_subdirectory(picowota)
+
+picowota_build_combined(${PROJECT_NAME})

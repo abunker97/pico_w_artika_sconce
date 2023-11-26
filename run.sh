@@ -15,4 +15,4 @@ else
     echo "OpenOcd server started"
 fi
 
-gdb-multiarch ./build/pico_w_artika_sconce.elf -ex "target remote localhost:3333" -ex "load" -ex "monitor reset init" -ex "tui enable"
+gdb-multiarch ./build/picowota_pico_w_artika_sconce.elf -ex "target remote localhost:3333" -ex "load" -ex "monitor reset init" -ex "tui enable"

@@ -1,3 +1,3 @@
 cd ./build/
-ninja
+make
 cd ..
