@@ -200,6 +200,50 @@ static void mqtt_request_cb( void* arg, err_t err )
    }
 }
 
+// callback for initial publish chain
+static void mqtt_init_pub_chan_cb( void* arg, err_t err )
+{
+   asMqtt_pubTopics_enum prevTopic = (asMqtt_pubTopics_enum)arg;
+   if( err == 0 )
+   {
+      switch( prevTopic )
+      {
+      case( AVAILABILITY_TOPIC ):
+         mqtt_publish(
+             mqtt_client, pubTopics[ STATE_TOPIC ],
+             WS281X_Light_State_Strings[ currentLightState.lightState ],
+             strlen(
+                 WS281X_Light_State_Strings[ currentLightState.lightState ] ),
+             MQTT_QOS, true, mqtt_init_pub_chan_cb,
+             LWIP_CONST_CAST( void*, STATE_TOPIC ) );
+         break;
+      case( STATE_TOPIC ):
+         mqtt_publish(
+             mqtt_client, pubTopics[ EFFECT_STATE_TOPIC ],
+             WS281X_Light_Effects[ currentLightState.effect ].string,
+             strlen( WS281X_Light_Effects[ currentLightState.effect ].string ),
+             MQTT_QOS, true, mqtt_init_pub_chan_cb,
+             LWIP_CONST_CAST( void*, EFFECT_STATE_TOPIC ) );
+         break;
+      case( EFFECT_STATE_TOPIC ):
+         itoa( currentLightState.brightness, num_to_string_buf,
+               sizeof( num_to_string_buf ) / sizeof( char ) );
+
+         mqtt_publish( mqtt_client, pubTopics[ BRIGHTNESS_STATE_TOPIC ],
+                       num_to_string_buf, strlen( num_to_string_buf ), MQTT_QOS,
+                       true, mqtt_init_pub_chan_cb,
+                       LWIP_CONST_CAST( void*, BRIGHTNESS_STATE_TOPIC ) );
+         break;
+
+      case( BRIGHTNESS_STATE_TOPIC ):
+         printf( "Pub chain complete...\r\n" );
+         break;
+      default:
+         printf( "WARNING: Unknown state topic\r\n");
+      }
+   }
+}
+
 static void mqtt_connection_cb( mqtt_client_t* client, void* arg,
                                 mqtt_connection_status_t status )
 {
@@ -245,10 +289,14 @@ void mqtt_client_connect_broker()
       vTaskDelay( 100 / portTICK_PERIOD_MS );
    }
 
-   mqtt_publish( mqtt_client, pubTopics[ AVAILABILITY_TOPIC ], "online", 6,
-                 MQTT_QOS, true, mqtt_request_cb,
-                 LWIP_CONST_CAST( void*, &mqtt_client_info ) );
+   printf( "CurrntState: %u %u %u\r\n", currentLightState.lightState,
+           currentLightState.effect, currentLightState.brightness );
 
+   mqtt_publish( mqtt_client, pubTopics[ AVAILABILITY_TOPIC ], "online", 6,
+                 MQTT_QOS, true, mqtt_init_pub_chan_cb,
+                 LWIP_CONST_CAST( void*, AVAILABILITY_TOPIC ) );
+
+   /*
    mqtt_publish(
        mqtt_client, pubTopics[ STATE_TOPIC ],
        WS281X_Light_State_Strings[ currentLightState.lightState ],
@@ -269,6 +317,7 @@ void mqtt_client_connect_broker()
    mqtt_publish( mqtt_client, pubTopics[ BRIGHTNESS_STATE_TOPIC ],
                  num_to_string_buf, strlen( num_to_string_buf ), MQTT_QOS, true,
                  mqtt_request_cb, LWIP_CONST_CAST( void*, &mqtt_client_info ) );
+                 */
 }
 
 void MqttTask( void* param )
