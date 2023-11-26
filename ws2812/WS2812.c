@@ -89,8 +89,8 @@ u32 WS281X_taskSetup()
 
    WS281X_stateQueue = xQueueCreate( WS281X_QUEUE_LEN, sizeof( LightState ) );
 
-   return xTaskCreate( WS281X_task, "WS281X Task", 1024, NULL, 3,
-                       &WS281X_taskHandle );
+   return xTaskCreate( WS281X_task, "WS281X Task", configMINIMAL_STACK_SIZE,
+                       NULL, 3, &WS281X_taskHandle );
 }
 
 void WS281X_task()
