@@ -11,6 +11,11 @@ set(CMAKE_C_STANDARD 11)
 
 add_executable(${PROJECT_NAME})
 
+# generate the header file into the source tree as it is included in the RP2040 datasheet
+pico_generate_pio_header(${PROJECT_NAME}
+    ${CMAKE_CURRENT_LIST_DIR}/ws2812/ws2812.pio
+)
+
 pico_sdk_init()
 
 pico_enable_stdio_usb(${PROJECT_NAME} 0)
@@ -23,6 +28,8 @@ target_link_libraries(${PROJECT_NAME}
     pico_cyw43_arch_lwip_sys_freertos
     pico_stdlib
     hardware_uart
+    hardware_pio
+    hardware_dma
     pico_lwip_iperf
     pico_lwip_mqtt
     FreeRTOS-Kernel
@@ -35,6 +42,7 @@ target_sources(${PROJECT_NAME} PRIVATE
    ${PROJECT_SOURCE_DIR}/heartbeat/heartbeat.c
    ${PROJECT_SOURCE_DIR}/terminal/terminal.c
    ${PROJECT_SOURCE_DIR}/networking/asMqtt.c
+   ${PROJECT_SOURCE_DIR}/ws2812/WS2812.c
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE

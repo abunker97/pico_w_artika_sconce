@@ -18,7 +18,7 @@
 #include "heartbeat.h"
 #include "terminal.h"
 #include "asMqtt.h"
-
+#include "WS2812.h"
 
 int main()
 {
@@ -31,6 +31,8 @@ int main()
    // creates all tasks
    status = HeartbeatTaskSetup();
    status = TerminalTaskSetup();
+
+   status = WS281X_taskSetup();
 
    status = asMqtt_TaskSetup();
 

@@ -2,11 +2,24 @@
 #define ASMQTT_H
 
 #include "pico/stdlib.h"
+#include "pico/cyw43_arch.h"
+#include "cyw43_country.h"
 
 // allows for wifi info to be changed at compile time
+
+#define WIFI_COUNTRY_CODE CYW43_COUNTRY_USA
+
 #define WIFI_SSID "ATB"
 
 #define WIFI_PASSWORD "Aust1nBunk3r6545"
+
+#define WIFI_SECURITY CYW43_AUTH_WPA2_AES_PSK
+
+#define WIFI_CONNECTION_TIMEOUT_MS 3000
+
+#define WIFI_CONNECTION_RETRY_TIME_MS 0
+
+#define MQTT_SERVER_ADDR "192.168.1.75"
 
 #define MQTT_CLIENT_NAME "artika_sconce"
 
@@ -20,24 +33,28 @@
 
 #define MAX_MQTT_MESSAGE_DATA 50
 
+#define CHECKUP_TIME_MS 30000
+
 //
 // SUB TOPICS
 // these also need to be put into the .c file
 //
 
-#define COMMAND_TOPIC_STRING "test_light/command_topic"
-#define EFFECT_COMMAND_TOPIC_STRING "test_light/effect_command_topic"
-#define BRIGHTNESS_COMMAND_TOPIC_STRING "test_light/brightness_command_topic"
+#define NUMBER_OF_SUB_TOPICS 3
+#define COMMAND_TOPIC_STRING "electronics_room_sconce/command_topic"
+#define EFFECT_COMMAND_TOPIC_STRING "electronics_room_sconce/effect_command_topic"
+#define BRIGHTNESS_COMMAND_TOPIC_STRING "electronics_room_sconce/brightness_command_topic"
 
 //
 // PUB TOPICS
 // these also need to added to the .c file
 //
 
-#define AVAILABILITY_TOPIC_STRING "test_light/availability_topic"
-#define STATE_TOPIC_STRING "test_light/state_topic"
-#define EFFECT_STATE_TOPIC_STRING "test_light/effect_state_topic"
-#define BRIGHTNESS_STATE_TOPIC_STRING "test_light/brightness_state_topic"
+#define NUMBER_OF_PUB_TOPICS 4
+#define AVAILABILITY_TOPIC_STRING "electronics_room_sconce/availability_topic"
+#define STATE_TOPIC_STRING "electronics_room_sconce/state_topic"
+#define EFFECT_STATE_TOPIC_STRING "electronics_room_sconce/effect_state_topic"
+#define BRIGHTNESS_STATE_TOPIC_STRING "electronics_room_sconce/brightness_state_topic"
 
 uint32_t asMqtt_TaskSetup();
 
