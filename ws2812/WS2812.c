@@ -141,7 +141,16 @@ void WS281X_task()
 
 void showStrip()
 {
-   dma_channel_wait_for_finish_blocking( dma_chan );
+   // check if dma is busy and then wait for it to finish.
+   // Also need to delay otherwise leds get hung.
+   // NOTE: there is a certain window of time that if the dma finishes right
+   //       before reaching this point the leds will also hang
+   if( dma_channel_is_busy( dma_chan ) )
+   {
+      dma_channel_wait_for_finish_blocking( dma_chan );
+      vTaskDelay( 100 / portTICK_PERIOD_MS );
+   }
+
    dma_channel_set_read_addr( dma_chan, currentStrip, true );
    switchCurrStrip();
 }
