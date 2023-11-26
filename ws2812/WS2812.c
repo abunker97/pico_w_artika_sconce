@@ -242,17 +242,18 @@ void solidBlue()
 
 void chasingGreen()
 {
-   static u8 headLoc = 0;
+   static u32 headLoc = 0;
    static bool newFrameNeeded = true;
-   static const u8 tailLength = 5;
+   static const u32 tailLength = 5;
 
    if( newFrameNeeded )
    {
       for( u32 i = 0; i < WS281X_NUM_LEDS; i++ )
       {
          if( ( i <= headLoc && i >= headLoc - tailLength ) ||
-             ( headLoc - tailLength < 0 &&
-               i > WS281X_NUM_LEDS + ( headLoc - tailLength ) ) )
+             ( headLoc < tailLength &&
+               i > WS281X_NUM_LEDS + headLoc - tailLength ) ||
+             ( headLoc < tailLength && i < headLoc ) )
          {
             currentStrip[ i ] = urgbU32( 0, 255, 0 );
          }
@@ -506,7 +507,7 @@ u32 heatColor( u8 temperature )
    // calculate a value that ramps up from
    // zero to 255 in each 'third' of the scale.
    u8 heatRamp = t192 & 0x3F; // 0..63
-   heatRamp <<= 2;                 // scale up to 0..252
+   heatRamp <<= 2;            // scale up to 0..252
 
    // now figure out which third of the spectrum we're in:
    if( t192 & 0x80 )
