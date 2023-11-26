@@ -148,7 +148,7 @@ void showStrip()
    if( dma_channel_is_busy( dma_chan ) )
    {
       dma_channel_wait_for_finish_blocking( dma_chan );
-      vTaskDelay( 100 / portTICK_PERIOD_MS );
+      vTaskDelay( 2 / portTICK_PERIOD_MS );
    }
 
    dma_channel_set_read_addr( dma_chan, currentStrip, true );
