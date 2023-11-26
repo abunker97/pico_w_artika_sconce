@@ -18,7 +18,7 @@
 #include "heartbeat.h"
 #include "terminal.h"
 #include "asMqtt.h"
-#include "WS2812.h"
+#include "WS281X.h"
 
 int main()
 {

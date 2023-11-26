@@ -1,6 +1,6 @@
 #include "asMqtt.h"
 #include "heartbeat.h"
-#include "WS2812.h"
+#include "WS281X.h"
 
 #include <stdio.h>
 #include <stdlib.h>

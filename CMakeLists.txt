@@ -13,7 +13,7 @@ add_executable(${PROJECT_NAME})
 
 # generate the header file into the source tree as it is included in the RP2040 datasheet
 pico_generate_pio_header(${PROJECT_NAME}
-    ${CMAKE_CURRENT_LIST_DIR}/ws2812/ws2812.pio
+    ${CMAKE_CURRENT_LIST_DIR}/ws281X/ws2812.pio
 )
 
 pico_sdk_init()
@@ -42,7 +42,7 @@ target_sources(${PROJECT_NAME} PRIVATE
    ${PROJECT_SOURCE_DIR}/heartbeat/heartbeat.c
    ${PROJECT_SOURCE_DIR}/terminal/terminal.c
    ${PROJECT_SOURCE_DIR}/networking/asMqtt.c
-   ${PROJECT_SOURCE_DIR}/ws2812/WS2812.c
+   ${PROJECT_SOURCE_DIR}/ws281X/WS281X.c
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
@@ -50,6 +50,6 @@ target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/heartbeat
     ${PROJECT_SOURCE_DIR}/terminal
     ${PROJECT_SOURCE_DIR}/networking
-    ${PROJECT_SOURCE_DIR}/ws2812
+    ${PROJECT_SOURCE_DIR}/ws281X
     ${PICO_LWIP_CONTRIB_PATH}/apps/ping
 )
