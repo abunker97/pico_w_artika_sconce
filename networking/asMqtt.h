@@ -35,6 +35,8 @@
 
 #define CHECKUP_TIME_MS 30000
 
+#define PICOWOTA_REBOOT_COMMAND "reboot"
+
 //
 // SUB TOPICS
 // these also need to be put into the .c file

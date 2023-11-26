@@ -160,9 +160,12 @@ static void mqtt_incoming_data_cb( void* arg, const uint8_t* data, uint16_t len,
                     LWIP_CONST_CAST( void*, &mqtt_client_info ) );
       break;
    case PICOWOTA_REBOOT_TOPIC:
+
       printf( "Rebooting into bootloader...\r\n" );
+
       vTaskDelay( 100 / portTICK_PERIOD_MS );
-      if( strcmp( mqttData, "reboot" ) == 0 )
+
+      if( strcmp( mqttData, PICOWOTA_REBOOT_COMMAND ) == 0 )
       {
          picowota_reboot( true );
       }
