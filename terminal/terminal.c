@@ -5,6 +5,7 @@
 #include <string.h>
 
 static void delayCommand( char* );
+static void printStats();
 static void displayHelp();
 
 TaskHandle_t TerminalTaskHandle = NULL;
@@ -17,6 +18,10 @@ const Command availCommands[] = {
       .callback = (void*)delayCommand,
       .description =
           "Changes led blink rate to a given value in ms. EX: delay 100" },
+    { .command = "stat",
+      .length = 4,
+      .callback = (void*)printStats,
+      .description = "Allows the printing of statics about what is running." },
     { .command = "help",
       .length = 4,
       .callback = (void*)displayHelp,
@@ -52,6 +57,76 @@ void delayCommand( char* cmd )
    }
 
    xSemaphoreGive( HeartbeatSemaphore );
+}
+// helper functions for printStats
+void getStateSting( eTaskState state, char* stateString )
+{
+   switch( state )
+   {
+   case( eRunning ):
+      strcpy( stateString, "Running" );
+      break;
+   case( eReady ):
+      strcpy( stateString, "Ready" );
+      break;
+   case( eBlocked ):
+      strcpy( stateString, "Blocked" );
+      break;
+   case( eSuspended ):
+      strcpy( stateString, "Suspened" );
+      break;
+   case( eDeleted ):
+      strcpy( stateString, "Deleted" );
+      break;
+   case( eInvalid ):
+      strcpy( stateString, "Invalid" );
+      break;
+   default:
+      strcpy( stateString, "Unknown" );
+   }
+}
+
+static inline uint32_t getUsagePercent( uint32_t time, uint32_t totalTime )
+{
+   return ( time * 100 ) / totalTime;
+}
+
+//prints stats for freertos
+void printStats()
+{
+   UBaseType_t numTasks = uxTaskGetNumberOfTasks();
+   TaskStatus_t* pTaskStatusArray =
+       (TaskStatus_t*)pvPortMalloc( numTasks * sizeof( TaskStatus_t ) );
+   uxTaskGetSystemState( pTaskStatusArray, numTasks, NULL );
+
+   char stateString[ 15 ];
+
+   uint32_t totalTime = 0;
+
+   for( uint32_t i = 0; i < numTasks; i++ )
+   {
+      totalTime += pTaskStatusArray[ i ].ulRunTimeCounter;
+   }
+
+   printf( "\r\n\r\nNumber of Tasks: %d\r\n", numTasks );
+
+   printf( "Total Runtime: %u\r\n", totalTime );
+
+   printf( "NAME\t\t\tSTATE\t\t\tRUNTIME\t\t\t%%USAGE\t\t\tWATERMARK\r\n----\t\t\t-----\t\t\t-"
+           "------\t\t\t------\t\t\t---------\r\n" );
+
+   for( uint32_t i = 0; i < numTasks; i++ )
+   {
+      getStateSting( pTaskStatusArray[ i ].eCurrentState, stateString );
+
+      printf( "%-15s\t\t%-15s\t\t%-15u\t\t%-15u\t\t%u\r\n",
+              pTaskStatusArray[ i ].pcTaskName, stateString,
+              pTaskStatusArray[ i ].ulRunTimeCounter,
+              getUsagePercent( pTaskStatusArray[ i ].ulRunTimeCounter,
+                               totalTime ), pTaskStatusArray[i].usStackHighWaterMark );
+   }
+
+   printf( "\r\n\r\n" );
 }
 
 // display the help command
