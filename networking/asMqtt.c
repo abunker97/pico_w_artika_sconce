@@ -325,10 +325,12 @@ void MqttTask( void* param )
    }
 
    // allow the led task to start now that cyw43 is initialized
+   /*
    if( HeartbeatSetupSemaphore != NULL )
    {
       xSemaphoreGive( HeartbeatSetupSemaphore );
    }
+   */
 
    cyw43_arch_enable_sta_mode();
 
@@ -342,8 +344,10 @@ void MqttTask( void* param )
    printf( "WIFI CONNECTED\r\n" );
 
    // change led blink rate to slower when wifi connected
+   /*
    uint32_t delayVal = 1000;
    xQueueSend( delay_queue, (void*)&delayVal, 10 );
+   */
 
    // TODO: add dns probably needs to use mdns
    ipaddr_aton( MQTT_SERVER_ADDR, &brokerIP );

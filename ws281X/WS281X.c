@@ -22,6 +22,7 @@ static void solidBlue();
 static void chasingGreen();
 static void ocean();
 static void torch();
+static void wreath();
 
 static u8 coolDown( u8, u8, u32 );
 static inline u8 scale8_video( u8, u8 );
@@ -53,6 +54,7 @@ const LightEffect WS281X_Light_Effects[ WS281X_LIGHT_EFFECT_NUM ] = {
                                 .function = (void*)chasingGreen },
     [WS281X_LIGHT_EFFECT_2] = { .string = "Ocean", .function = (void*)ocean },
     [WS281X_LIGHT_EFFECT_3] = { .string = "Torch", .function = (void*)torch },
+    [WS281X_LIGHT_EFFECT_4] = { .string = "Wreath", .function = (void*)wreath },
 };
 
 u32 WS281X_taskSetup()
@@ -430,6 +432,36 @@ void torch()
    }
 
    if( getCurrTime() - ms_since_last_update > 30 )
+   {
+      newFrameNeeded = true;
+      showStrip();
+      ms_since_last_update = getCurrTime();
+   }
+}
+
+void wreath()
+{
+   static u8 lightPobability = 3;
+   static bool newFrameNeeded = true;
+
+   if( newFrameNeeded )
+   {
+      for( u32 i = 0; i < WS281X_NUM_LEDS; i++ )
+      {
+         if( randomNumber( 0, lightPobability ) == 1 )
+         {
+            currentStrip[ i ] = urgbU32( 255, 0, 0 );
+         }
+         else
+         {
+            currentStrip[ i ] = urgbU32( 0, 255, 0 );
+         }
+      }
+
+      newFrameNeeded = false;
+   }
+
+   if( getCurrTime() - ms_since_last_update > 1000 )
    {
       newFrameNeeded = true;
       showStrip();

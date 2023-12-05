@@ -29,7 +29,7 @@ int main()
    uint32_t status;
 
    // creates all tasks
-   status = HeartbeatTaskSetup();
+   //status = HeartbeatTaskSetup();
    status = TerminalTaskSetup();
 
    status = WS281X_taskSetup();

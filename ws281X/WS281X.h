@@ -26,13 +26,14 @@ static char* const WS281X_Light_State_Strings[ WS281X_LIGHT_STATE_NUM ] = {
     [WS281X_LIGHT_ON] = "ON",
 };
 
-#define WS281X_LIGHT_EFFECT_NUM 4
+#define WS281X_LIGHT_EFFECT_NUM 5
 typedef enum
 {
    WS281X_LIGHT_EFFECT_0 = 0,
    WS281X_LIGHT_EFFECT_1,
    WS281X_LIGHT_EFFECT_2,
    WS281X_LIGHT_EFFECT_3,
+   WS281X_LIGHT_EFFECT_4,
 } WS2812_Light_Effect_Enum;
 
 typedef struct lightEffect

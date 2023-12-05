@@ -13,11 +13,12 @@ TaskHandle_t TerminalTaskHandle = NULL;
 char cmdBuff[ COMMAND_MESSAGE_LENGTH ];
 
 const Command availCommands[] = {
-    { .command = "delay",
+   // disable delay command as heartbeat has been disabled
+/*    { .command = "delay",
       .length = 5,
       .callback = (void*)delayCommand,
       .description =
-          "Changes led blink rate to a given value in ms. EX: delay 100" },
+          "Changes led blink rate to a given value in ms. EX: delay 100" },*/
     { .command = "stat",
       .length = 4,
       .callback = (void*)printStats,
@@ -144,7 +145,7 @@ void displayHelp()
 uint32_t TerminalTaskSetup()
 {
    // creates queue for passing values around
-   delay_queue = xQueueCreate( DELAY_QUEUE_LEN, sizeof( uint32_t ) );
+   //delay_queue = xQueueCreate( DELAY_QUEUE_LEN, sizeof( uint32_t ) );
 
    return xTaskCreate( TerminalTask, "Terminal Task", configMINIMAL_STACK_SIZE,
                        NULL, 1, &TerminalTaskHandle );
