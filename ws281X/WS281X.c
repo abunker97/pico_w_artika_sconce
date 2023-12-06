@@ -441,20 +441,23 @@ void torch()
 
 void wreath()
 {
-   static u8 lightPobability = 3;
+   static u8 lightPobability = 50;
    static bool newFrameNeeded = true;
+   static bool blockRed = false;
 
    if( newFrameNeeded )
    {
       for( u32 i = 0; i < WS281X_NUM_LEDS; i++ )
       {
-         if( randomNumber( 0, lightPobability ) == 1 )
+         if( !blockRed && ( randomNumber( 0, 100 ) < lightPobability ) )
          {
             currentStrip[ i ] = urgbU32( 255, 0, 0 );
+            blockRed = true;
          }
          else
          {
             currentStrip[ i ] = urgbU32( 0, 255, 0 );
+            blockRed = false;
          }
       }
 
